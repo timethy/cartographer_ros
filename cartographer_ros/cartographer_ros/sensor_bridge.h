@@ -25,6 +25,7 @@
 #include "cartographer/transform/rigid_transform.h"
 #include "cartographer/transform/transform.h"
 #include "cartographer_ros/tf_bridge.h"
+#include "cartographer_ros_msgs/LandmarkObservations.h"
 #include "geometry_msgs/Transform.h"
 #include "geometry_msgs/TransformStamped.h"
 #include "nav_msgs/OccupancyGrid.h"
@@ -62,6 +63,10 @@ class SensorBridge {
       const sensor_msgs::MultiEchoLaserScan::ConstPtr& msg);
   void HandlePointCloud2Message(const std::string& sensor_id,
                                 const sensor_msgs::PointCloud2::ConstPtr& msg);
+  std::unique_ptr<::cartographer::sensor::LandmarkData> ToLandmarkData(
+      const cartographer_ros_msgs::LandmarkObservations::ConstPtr& msg);
+  void HandleLandmarkObservationsMessage(const std::string& sensor_id,
+                                         const cartographer_ros_msgs::LandmarkObservations::ConstPtr& msg);
 
   const TfBridge& tf_bridge() const;
 

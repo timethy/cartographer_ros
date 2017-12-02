@@ -21,6 +21,7 @@ int32 num_laser_scans
 int32 num_multi_echo_laser_scans
 int32 num_subdivisions_per_laser_scan
 int32 num_point_clouds
+int32 num_landmarks
 float64 rangefinder_sampling_ratio
 float64 odometry_sampling_ratio
 float64 imu_sampling_ratio
