@@ -29,6 +29,8 @@ add_message_files(
     SubmapTexture.msg
     SensorTopics.msg
     TrajectoryOptions.msg
+    LandmarkObservation.msg
+    LandmarkObservations.msg
 )
 
 add_service_files(

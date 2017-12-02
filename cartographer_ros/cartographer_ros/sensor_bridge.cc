@@ -138,6 +138,35 @@ void SensorBridge::HandlePointCloud2Message(
                     point_cloud);
 }
 
+std::unique_ptr<::cartographer::sensor::LandmarkData> SensorBridge::ToLandmarkData(
+    const cartographer_ros_msgs::LandmarkObservations::ConstPtr& msg) {
+  const carto::common::Time time = FromRos(msg->header.stamp);
+  const auto sensor_to_tracking = tf_bridge_.LookupToTracking(
+      time, CheckNoLeadingSlash(msg->header.frame_id));
+  if (sensor_to_tracking == nullptr) {
+    return nullptr;
+  }
+
+  std::vector<::cartographer::sensor::Landmark> landmarks;
+  landmarks.reserve(msg->observations.size());
+  for(const auto& observation : msg->observations) {
+    landmarks.push_back({observation.id, (*sensor_to_tracking) * ToRigid3d(observation.pose), 0., 0.});
+  }
+
+  return ::cartographer::common::make_unique<::cartographer::sensor::LandmarkData>(
+      ::cartographer::sensor::LandmarkData{time, landmarks});
+}
+
+void SensorBridge::HandleLandmarkObservationsMessage(
+    const std::string& sensor_id,
+    const cartographer_ros_msgs::LandmarkObservations::ConstPtr& msg) {
+  std::unique_ptr<::cartographer::sensor::LandmarkData> landmark_data = ToLandmarkData(msg);
+  if (landmark_data != nullptr) {
+    trajectory_builder_->AddLandmarkData(sensor_id, *landmark_data);
+  }
+}
+
+
 const TfBridge& SensorBridge::tf_bridge() const { return tf_bridge_; }
 
 void SensorBridge::HandleLaserScan(
@@ -175,5 +204,7 @@ void SensorBridge::HandleRangefinder(
             ranges, sensor_to_tracking->cast<float>()));
   }
 }
+
+
 
 }  // namespace cartographer_ros

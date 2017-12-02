@@ -50,6 +50,7 @@ cartographer_ros_msgs::SensorTopics DefaultSensorTopics() {
   topics.laser_scan_topic = kLaserScanTopic;
   topics.multi_echo_laser_scan_topic = kMultiEchoLaserScanTopic;
   topics.point_cloud2_topic = kPointCloud2Topic;
+  topics.landmark_topic = kLandmarkTopic;
   topics.imu_topic = kImuTopic;
   topics.odometry_topic = kOdometryTopic;
   return topics;
@@ -327,6 +328,14 @@ void Node::LaunchSubscribers(const TrajectoryOptions& options,
              &node_handle_, this),
          topic});
   }
+  for (const std::string& topic : ComputeRepeatedTopicNames(
+      topics.landmark_topic, options.num_landmarks)) {
+    subscribers_[trajectory_id].push_back(
+        {SubscribeWithHandler<cartographer_ros_msgs::LandmarkObservations>(
+            &Node::HandleLandmarkObservationsMessage, trajectory_id, topic,
+            &node_handle_, this),
+         topic});
+  }
 
   // For 2D SLAM, subscribe to the IMU if we expect it. For 3D SLAM, the IMU is
   // required.
@@ -545,6 +554,19 @@ void Node::HandlePointCloud2Message(
   }
   map_builder_bridge_.sensor_bridge(trajectory_id)
       ->HandlePointCloud2Message(sensor_id, msg);
+}
+
+void Node::HandleLandmarkObservationsMessage(
+    const int trajectory_id, const std::string& sensor_id,
+    const cartographer_ros_msgs::LandmarkObservations::ConstPtr& msg) {
+  carto::common::MutexLocker lock(&mutex_);
+  /* TODO (timethy): Implement sampling for landmark observations
+  if (!sensor_samplers_.at(trajectory_id).landmarks_sampler.Pulse()) {
+    return;
+  }
+   */
+  map_builder_bridge_.sensor_bridge(trajectory_id)
+      ->HandleLandmarkObservationsMessage(sensor_id, msg);
 }
 
 void Node::SerializeState(const std::string& filename) {

@@ -28,6 +28,7 @@ options = {
   num_multi_echo_laser_scans = 0,
   num_subdivisions_per_laser_scan = 1,
   num_point_clouds = 2,
+  num_landmarks = 0,
   lookup_transform_timeout_sec = 0.2,
   submap_publish_period_sec = 0.3,
   pose_publish_period_sec = 5e-3,

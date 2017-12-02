@@ -26,6 +26,7 @@ namespace cartographer_ros {
 constexpr char kLaserScanTopic[] = "scan";
 constexpr char kMultiEchoLaserScanTopic[] = "echoes";
 constexpr char kPointCloud2Topic[] = "points2";
+constexpr char kLandmarkTopic[] = "landmarks";
 constexpr char kImuTopic[] = "imu";
 constexpr char kOdometryTopic[] = "odom";
 constexpr char kFinishTrajectoryServiceName[] = "finish_trajectory";

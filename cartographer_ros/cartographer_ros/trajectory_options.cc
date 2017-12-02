@@ -62,6 +62,8 @@ TrajectoryOptions CreateTrajectoryOptions(
           "num_subdivisions_per_laser_scan");
   options.num_point_clouds =
       lua_parameter_dictionary->GetNonNegativeInt("num_point_clouds");
+  options.num_landmarks =
+      lua_parameter_dictionary->GetNonNegativeInt("num_landmarks");
   options.rangefinder_sampling_ratio =
       lua_parameter_dictionary->GetDouble("rangefinder_sampling_ratio");
   options.odometry_sampling_ratio =
@@ -109,6 +111,7 @@ bool FromRosMessage(const cartographer_ros_msgs::TrajectoryOptions& msg,
   options->num_subdivisions_per_laser_scan =
       msg.num_subdivisions_per_laser_scan;
   options->num_point_clouds = msg.num_point_clouds;
+  options->num_landmarks = msg.num_landmarks;
   options->rangefinder_sampling_ratio = msg.rangefinder_sampling_ratio;
   options->odometry_sampling_ratio = msg.odometry_sampling_ratio;
   options->imu_sampling_ratio = msg.imu_sampling_ratio;
@@ -133,6 +136,7 @@ cartographer_ros_msgs::TrajectoryOptions ToRosMessage(
   msg.num_multi_echo_laser_scans = options.num_multi_echo_laser_scans;
   msg.num_subdivisions_per_laser_scan = options.num_subdivisions_per_laser_scan;
   msg.num_point_clouds = options.num_point_clouds;
+  msg.num_landmarks = options.num_landmarks;
   msg.rangefinder_sampling_ratio = options.rangefinder_sampling_ratio;
   msg.odometry_sampling_ratio = options.odometry_sampling_ratio;
   msg.imu_sampling_ratio = options.imu_sampling_ratio;

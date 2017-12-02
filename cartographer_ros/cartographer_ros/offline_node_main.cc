@@ -189,6 +189,11 @@ void Run(const std::vector<std::string>& bag_filenames) {
               trajectory_id, topic,
               delayed_msg.instantiate<sensor_msgs::PointCloud2>());
         }
+        if (delayed_msg.isType<cartographer_ros_msgs::LandmarkObservations>()) {
+          node.HandleLandmarkObservationsMessage(
+              trajectory_id, topic,
+              delayed_msg.instantiate<cartographer_ros_msgs::LandmarkObservations>());
+        }
         if (delayed_msg.isType<sensor_msgs::Imu>()) {
           node.HandleImuMessage(trajectory_id, topic,
                                 delayed_msg.instantiate<sensor_msgs::Imu>());
