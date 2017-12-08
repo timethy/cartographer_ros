@@ -158,10 +158,12 @@ class Node {
     TrajectorySensorSamplers(double rangefinder_sampling_ratio,
                              double odometry_sampling_ratio,
                              double imu_sampling_ratio)
-        : rangefinder_sampler(rangefinder_sampling_ratio),
+        : landmark_sampler(1.),
+          rangefinder_sampler(rangefinder_sampling_ratio),
           odometry_sampler(odometry_sampling_ratio),
           imu_sampler(imu_sampling_ratio) {}
-
+    
+    ::cartographer::common::FixedRatioSampler landmark_sampler;
     ::cartographer::common::FixedRatioSampler rangefinder_sampler;
     ::cartographer::common::FixedRatioSampler odometry_sampler;
     ::cartographer::common::FixedRatioSampler imu_sampler;

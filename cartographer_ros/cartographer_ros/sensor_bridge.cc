@@ -141,6 +141,10 @@ void SensorBridge::HandlePointCloud2Message(
 std::unique_ptr<::cartographer::sensor::LandmarkData> SensorBridge::ToLandmarkData(
     const cartographer_ros_msgs::LandmarkObservations::ConstPtr& msg) {
   const carto::common::Time time = FromRos(msg->header.stamp);
+  if(msg->observations.empty()) {
+    return ::cartographer::common::make_unique<::cartographer::sensor::LandmarkData>(
+            ::cartographer::sensor::LandmarkData{time, {}});
+  }
   const auto sensor_to_tracking = tf_bridge_.LookupToTracking(
       time, CheckNoLeadingSlash(msg->header.frame_id));
   if (sensor_to_tracking == nullptr) {

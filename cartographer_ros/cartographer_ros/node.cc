@@ -564,11 +564,9 @@ void Node::HandleLandmarkObservationsMessage(
     const int trajectory_id, const std::string& sensor_id,
     const cartographer_ros_msgs::LandmarkObservations::ConstPtr& msg) {
   carto::common::MutexLocker lock(&mutex_);
-  /* TODO (timethy): Implement sampling for landmark observations
-  if (!sensor_samplers_.at(trajectory_id).landmarks_sampler.Pulse()) {
+  if (!sensor_samplers_.at(trajectory_id).landmark_sampler.Pulse()) {
     return;
   }
-   */
   map_builder_bridge_.sensor_bridge(trajectory_id)
       ->HandleLandmarkObservationsMessage(sensor_id, msg);
 }
